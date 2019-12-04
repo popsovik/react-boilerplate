@@ -1,0 +1,21 @@
+version: 0.2
+phases:
+  install:
+    runtime-versions:
+      nodejs: 10
+    commands:
+      - sudo apt-get install apt-transport-https
+      - curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+      - echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+      - sudo apt-get update && sudo apt-get install yarn > /dev/null 2>&1
+  build:
+    commands:
+      - yarn install
+      - yarn build
+      - yarn test
+      - cd dist
+      - aws s3 sync . s3://reactestci --cache-control no-cache
+cache:
+  paths:
+    - /var/cache/apt/**/*
+    - /var/lib/apt/lists/**/
