@@ -12,7 +12,7 @@ phases:
     commands:
       - yarn install
       - yarn build
-      - yarn test
+      #- yarn test
       - cd dist
       - aws s3 sync . s3://reactestci --cache-control no-cache
 cache:
